@@ -12,9 +12,29 @@ protected:
 
 public:
     Consumer(int id, string n, int u) {
-        consumerId = id;
-        name = n;
-        units = u;
+        try {
+            // Check Consumer ID
+            if (id <= 0)
+                throw invalid_argument("Consumer ID must be a positive number.");
+
+            // Check Name (Only alphabets and spaces)
+            for (char ch : n) {
+                if (!isalpha(ch) && ch != ' ')
+                    throw invalid_argument("Consumer name must contain only alphabets.");
+            }
+
+            // Check Units
+            if (u < 0)
+                throw invalid_argument("Units cannot be negative.");
+
+            consumerId = id;
+            name = n;
+            units = u;
+        }
+        catch (const exception &e) {
+            cout << "Constructor Error: " << e.what() << endl;
+            throw;      // Re-throw so object is not created with invalid data
+        }
     }
 
     virtual double calculateBill() = 0;
